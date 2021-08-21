@@ -1,4 +1,4 @@
-name: carla
+name: carla-0.9.12-no-rendering
 
 on:
   push:
@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Login to DockerHub
-      run: docker login -u "${{ secrets.DOCKERHUB_CONTAINER_IMAGES_USERNAME }}" -p "${{ secrets.DOCKERHUB_CONTAINER_IMAGES_TOKEN }}"
-    - name: Push image to DockerHub
+    - name: Build the image
+      run:  docker build -t docker.io/doganulus/carla:0.9.12-no-rendering carla/0.9.12-no-rendering
+    - name: Push the image to DockerHub
       run: |
-        docker build -t doganulus/carla:0.9.12-no-rendering carla/0.9.12-no-rendering
-        docker push doganulus/carla:0.9.12-no-rendering
+        docker login -u "${{ secrets.DOCKERHUB_CONTAINER_IMAGES_USERNAME }}" -p "${{ secrets.DOCKERHUB_CONTAINER_IMAGES_TOKEN }}"
+        docker push docker.io/doganulus/carla:0.9.12-no-rendering
