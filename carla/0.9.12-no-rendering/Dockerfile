@@ -8,7 +8,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* 
 
 RUN wget -q https://carla-releases.s3.eu-west-3.amazonaws.com/Linux/CARLA_${CARLA_RELEASE}.tar.gz
-RUN tar -zxf CARLA_${CARLA_RELEASE}.tar.gz --directory /opt/carla-simulator
+RUN mkdir -p /opt/carla-simulator && tar -zxf CARLA_${CARLA_RELEASE}.tar.gz -C /opt/carla-simulator
 RUN cd /opt/carla-simulator && sh ./ImportAssets.sh
 RUN rm CARLA_${CARLA_RELEASE}.tar.gz
     
