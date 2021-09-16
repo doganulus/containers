@@ -17,16 +17,27 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         carla-simulator=${CARLA_RELEASE} \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* 
 
+# Install missing CARLA dependencies
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get -y install \
+        libomp5 \
+        python3 \
+        python3-pip \
+        python-is-python3 \
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* 
+
 EXPOSE 2000-2002
 
-# RUN groupadd work -g 1000 \
-#    && useradd -ms /bin/bash carla -g 1000 -u 1000 \
-#    && printf "carla:carla" | chpasswd \
-#    && printf "carla ALL= NOPASSWD: ALL\\n" >> /etc/sudoers
+RUN groupadd work -g 1000 \
+   && useradd -ms /bin/bash carla -g 1000 -u 1000 \
+   && printf "carla:carla" | chpasswd \
+   && printf "carla ALL= NOPASSWD: ALL\\n" >> /etc/sudoers
     
-# USER carla
-# WORKDIR /home/carla/
+USER carla
+WORKDIR /home/carla/
 
-# Disable rendering totally by nullrhi flag -nullrhi
-# ENTRYPOINT /opt/carla-simulator/CarlaUE4.sh
+RUN pip install -U carla
+
+# Disable rendering totally by nullrhi flag
+ENTRYPOINT ["/opt/carla-simulator/CarlaUE4.sh", "-nullrhi"]
 
